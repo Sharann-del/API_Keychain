@@ -25,10 +25,13 @@ Runnable samples for calling API Keychain with common tools and SDKs.
 
 ## Effort tiers
 
-Use these as the `model` parameter:
+Use these as the `model` parameter for OpenAI clients:
 
 - `keychain-low` — fast, economical
 - `keychain-medium` — balanced
 - `keychain-high` — highest quality cascade
+
+For Claude Code, set `ANTHROPIC_BASE_URL` to your gateway host and use your
+`ak-` key. Model names like `claude-sonnet-4-6` map to the medium tier.
 
 See [docs/getting-started.md](../docs/getting-started.md) for the full walkthrough.

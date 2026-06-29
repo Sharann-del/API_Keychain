@@ -6,12 +6,13 @@ approximate and priorities may shift based on community feedback.
 ## Now (v1.0.x) — Stable gateway & dashboard
 
 - [x] OpenAI-compatible `/v1/chat/completions` and `/v1/models`
+- [x] Anthropic-compatible `/v1/messages` for Claude Code
 - [x] Effort tiers with cascade failover (`keychain-low` / `medium` / `high`)
-- [x] Eight provider integrations with cooldown-aware routing
+- [x] Twelve provider integrations with cooldown-aware routing
 - [x] Encrypted provider key storage and keychain key rotation
 - [x] Usage analytics and provider health in the dashboard
-- [x] Streaming responses
-- [ ] Automated test suite for routing and crypto primitives
+- [x] Streaming responses (OpenAI and Anthropic SSE)
+- [x] Automated test suite for routing and adapter primitives
 - [x] GitHub Actions CI on every PR (lint + build + gateway smoke test)
 - [x] Configurable CORS origins via `CORS_ORIGINS` environment variable
 
@@ -34,7 +35,7 @@ approximate and priorities may shift based on community feedback.
 
 ## Under consideration
 
-- Additional providers (Anthropic-compatible proxies, local Ollama bridge)
+- Local Ollama bridge
 - Budget caps per keychain key (token or request quotas)
 - A/B routing weights within a tier
 - CLI (`keychain`) for key management without the dashboard

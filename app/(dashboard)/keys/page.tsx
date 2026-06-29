@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 
 import { useAuth } from "@/lib/auth";
-import { api, useApi, PROXY_BASE_URL, ApiError } from "@/lib/api";
+import { api, useApi, API_BASE_URL, PROXY_BASE_URL, ApiError } from "@/lib/api";
 import { loadPrimaryKey } from "@/lib/keystore";
 import { formatRelative, maskKey, cn } from "@/lib/utils";
 import type {
@@ -138,7 +138,7 @@ export default function KeysPage() {
     <div>
       <PageHeader
         title="API Keys"
-        description="Your unified ak- key fronts every provider. Rotate or revoke without touching upstream credentials."
+        description="Your unified ak- key fronts every provider — for OpenAI SDKs, curl, and Claude Code."
         actions={
           <Button onClick={() => setCreateOpen(true)}>
             <Plus className="h-4 w-4" /> New key
@@ -202,13 +202,32 @@ export default function KeysPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Base URL</Label>
+            <Label>OpenAI base URL</Label>
             <div className="flex items-center gap-2 rounded-lg bg-secondary p-2">
               <code className="flex-1 px-1 font-mono text-sm">
                 {PROXY_BASE_URL}
               </code>
               <CopyButton value={PROXY_BASE_URL} label="Base URL copied" />
             </div>
+            <p className="text-xs text-muted-foreground">
+              Use with OpenAI SDKs, Cursor, and curl — append{" "}
+              <code className="font-mono">/chat/completions</code>.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Claude Code base URL</Label>
+            <div className="flex items-center gap-2 rounded-lg bg-secondary p-2">
+              <code className="flex-1 px-1 font-mono text-sm">
+                {API_BASE_URL}
+              </code>
+              <CopyButton value={API_BASE_URL} label="Claude base URL copied" />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Set as <code className="font-mono">ANTHROPIC_BASE_URL</code> (no{" "}
+              <code className="font-mono">/v1</code> suffix). Claude Code calls{" "}
+              <code className="font-mono">/v1/messages</code> on this host.
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -253,6 +272,28 @@ resp = client.chat.completions.create(
 )
 print(resp.choices[0].message.content)`}
             />
+          </div>
+          <div className="space-y-2">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Claude Code
+            </p>
+            <CodeBlock
+              code={`export ANTHROPIC_BASE_URL="${API_BASE_URL}"
+export ANTHROPIC_API_KEY="${cachedKey ?? "ak-..."}"
+
+# Models like claude-sonnet-4-6 map to effort tiers and route
+# through your free-tier provider cascade.
+claude`}
+            />
+            <p className="text-xs text-muted-foreground">
+              Same <code className="font-mono">ak-</code> key as above. Claude
+              sends <code className="font-mono">x-api-key</code>, which the
+              gateway accepts. Use{" "}
+              <code className="font-mono">claude-haiku-4-5</code>,{" "}
+              <code className="font-mono">claude-sonnet-4-6</code>, or{" "}
+              <code className="font-mono">claude-opus-4-6</code> for low /
+              medium / high routing.
+            </p>
           </div>
         </CardContent>
       </Card>

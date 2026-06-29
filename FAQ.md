@@ -5,14 +5,14 @@ more detail.
 
 ## What is API Keychain?
 
-A unified OpenAI-compatible gateway that routes requests across eight free-tier
-LLM providers behind a single `ak-` key, with effort-based tiers and automatic
-failover.
+A unified gateway that routes requests across twelve free-tier LLM providers
+behind a single `ak-` key, with effort-based tiers, automatic failover, and
+OpenAI plus Anthropic client support.
 
 ## Do I need a key for every provider?
 
 You need at least **one** upstream provider key for routing to work, but you
-do not need all eight. The cascade skips providers you have not configured.
+do not need all twelve. The cascade skips providers you have not configured.
 
 ## What are effort tiers?
 
@@ -23,7 +23,13 @@ do not need all eight. The cascade skips providers you have not configured.
 | `keychain-high` | Highest quality | Hard reasoning tasks |
 
 Each tier tries an ordered list of real models, cascading to lower tiers if
-needed.
+needed. Claude pseudo-models (`claude-haiku-4-5`, `claude-sonnet-4-6`,
+`claude-opus-4-6`) map to the same tiers for `/v1/messages`.
+
+## Does Claude Code work?
+
+Yes. Point `ANTHROPIC_BASE_URL` at your gateway and use your `ak-` key as
+`ANTHROPIC_API_KEY`. The gateway speaks Anthropic Messages natively.
 
 ## Is this a drop-in OpenAI replacement?
 

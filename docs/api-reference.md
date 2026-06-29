@@ -8,6 +8,7 @@ Base URL: `http://localhost:8000` (or your deployed gateway).
 | --- | --- |
 | `/users/*` | `Authorization: Bearer <supabase-jwt>` |
 | `/v1/chat/completions`, `/v1/models` | `Authorization: Bearer ak-<keychain-key>` |
+| `/v1/messages`, `/v1/messages/count_tokens` | `Authorization: Bearer ak-...` **or** `x-api-key: ak-...` |
 | `/health`, `/providers`, `/models` | None |
 
 ## Public endpoints
@@ -18,13 +19,13 @@ Service health check.
 
 ### `GET /providers`
 
-Provider catalog metadata.
+Provider catalog metadata (12 providers).
 
 ### `GET /models`
 
 Full model registry including tier assignments.
 
-## Gateway (OpenAI-compatible)
+## Gateway — OpenAI-compatible
 
 ### `POST /v1/chat/completions`
 
@@ -58,7 +59,62 @@ OpenAI-compatible chat completions with effort-tier routing.
 
 ### `GET /v1/models`
 
-OpenAI-compatible model list including `keychain-*` pseudo-models.
+OpenAI-compatible model list including:
+
+- `keychain-low`, `keychain-medium`, `keychain-high`
+- `claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-6`
+- User-enabled effective models (when you have a key for that provider)
+
+## Gateway — Anthropic-compatible
+
+For Claude Code and other Anthropic Messages clients.
+
+### `POST /v1/messages`
+
+Translates the request to OpenAI format, routes through the same effort-tier
+cascade, and returns an Anthropic-shaped response.
+
+**Headers:** `Authorization: Bearer ak-...` or `x-api-key: ak-...`
+
+**Body (subset):**
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 1024,
+  "messages": [{"role": "user", "content": "Hello"}],
+  "stream": false
+}
+```
+
+**Model → effort mapping:**
+
+| Model | Effort tier |
+| --- | --- |
+| `claude-haiku-4-5` | low |
+| `claude-sonnet-4-6` | medium |
+| `claude-opus-4-6` | high |
+| `keychain-low` / `keychain-medium` / `keychain-high` | direct tier |
+
+Also honors `output_config.effort` when set to `low`, `medium`, or `high`.
+
+**Streaming:** Set `"stream": true` for Anthropic SSE events (`message_start`,
+`content_block_delta`, `message_stop`, etc.).
+
+**Error format:** Anthropic-style `{"type": "error", "error": {...}}` (not
+OpenAI's `{"error": {...}}`).
+
+### `POST /v1/messages/count_tokens`
+
+Token estimate for Claude Code budgeting.
+
+**Headers:** Same as `/v1/messages`.
+
+**Response:**
+
+```json
+{"input_tokens": 42}
+```
 
 ## User management
 
@@ -98,7 +154,8 @@ Idempotently onboard the signed-in user. Call after first login.
 ```
 
 Supported `provider` values: `gemini`, `groq`, `cerebras`, `mistral`,
-`deepseek`, `openrouter`, `together`, `cohere`.
+`deepseek`, `openrouter`, `together`, `cohere`, `nim`, `sambanova`, `hf`,
+`cf`.
 
 ### Models
 
@@ -126,7 +183,7 @@ Supported `provider` values: `gemini`, `groq`, `cerebras`, `mistral`,
 
 ## Error format
 
-Gateway errors follow OpenAI-style JSON where applicable:
+OpenAI gateway errors:
 
 ```json
 {
@@ -138,8 +195,20 @@ Gateway errors follow OpenAI-style JSON where applicable:
 }
 ```
 
-Failed routing attempts may include `failed_attempts` in the error payload for
-debugging.
+Anthropic gateway errors:
+
+```json
+{
+  "type": "error",
+  "error": {
+    "type": "api_error",
+    "message": "All candidate models were exhausted."
+  }
+}
+```
+
+Failed routing attempts may include `failed_attempts` in OpenAI error payloads
+for debugging.
 
 ## Interactive docs
 

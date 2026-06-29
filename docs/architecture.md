@@ -10,6 +10,7 @@ analytics.
 flowchart TB
     subgraph clients [Clients]
         SDK[OpenAI SDK / curl]
+        Claude[Claude Code]
         Browser[Dashboard browser]
     end
 
@@ -26,6 +27,8 @@ flowchart TB
     subgraph gateway [FastAPI Gateway :8000]
         Mgmt["/users/* management API"]
         V1["/v1/chat/completions"]
+        Anthropic["/v1/messages"]
+        Adapter[anthropic_adapter.py]
         Router[router.py cascade]
         Crypto[crypto.py AES-GCM]
         Registry[registry.py tiers]
@@ -42,11 +45,14 @@ flowchart TB
     end
 
     SDK -->|Bearer ak-...| V1
+    Claude -->|x-api-key ak-...| Anthropic
     Browser --> Auth
     Auth --> SupaAuth
     Browser --> APIClient
     APIClient -->|JWT| Mgmt
     V1 --> Router
+    Anthropic --> Adapter
+    Adapter --> Router
     Mgmt --> Crypto
     Mgmt --> DB
     Router --> Registry
@@ -91,9 +97,16 @@ sequenceDiagram
 
 - FastAPI application entry point
 - JWT auth dependency for `/users/*`
-- Keychain key auth (`ak-...`) for `/v1/*`
+- Keychain key auth (`ak-...`) for `/v1/*` — Bearer header or `x-api-key`
 - Request logging, usage aggregation, provider health tracking
-- Streaming and non-streaming chat completion handlers
+- Streaming and non-streaming handlers for OpenAI and Anthropic formats
+
+### Anthropic adapter (`anthropic_adapter.py`)
+
+- Translates Anthropic Messages requests to OpenAI Chat Completions bodies
+- Maps OpenAI responses and SSE streams back to Anthropic message format
+- Resolves effort from Claude model names (`haiku` / `sonnet` / `opus`) or
+  `output_config.effort`
 
 ### Router (`router.py`)
 
@@ -142,7 +155,9 @@ flowchart LR
     subgraph inference [Inference]
         AK[ak- keychain key]
         V1["POST /v1/chat/completions"]
+        MSG["POST /v1/messages"]
         AK --> V1
+        AK --> MSG
     end
 
     subgraph management [Management]

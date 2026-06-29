@@ -47,7 +47,7 @@ const structuredData: JsonLdDocument = {
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Web",
       description:
-        "One API key for every free AI model. API Keychain unifies Gemini, Groq, Cerebras, Mistral, DeepSeek and more behind a single OpenAI-compatible endpoint with automatic failover.",
+        "One API key for every free AI model. API Keychain unifies 12 free-tier inference providers behind OpenAI Chat Completions and Anthropic Messages APIs with effort-based routing and automatic failover.",
       url: SITE_URL,
       publisher: { "@id": `${SITE_URL}/#organization` },
       offers: {

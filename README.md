@@ -6,9 +6,10 @@
   <img src="./.github/header.svg" alt="API Keychain" width="640" />
 </picture>
 
-A unified, OpenAI-compatible gateway that routes across eight inference networks
-behind a single endpoint, with effort-based routing, automatic failover,
-rate-limit cooldowns, encrypted key storage and full usage analytics.
+A unified gateway that routes across twelve free-tier inference providers
+behind OpenAI Chat Completions and Anthropic Messages APIs, with effort-based
+routing, automatic failover, rate-limit cooldowns, encrypted key storage and
+full usage analytics.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js_14-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js 14" />
@@ -26,19 +27,22 @@ rate-limit cooldowns, encrypted key storage and full usage analytics.
 ## Overview
 
 Modern apps want to use the generous free tiers from Gemini, Groq, Cerebras,
-Mistral, DeepSeek, OpenRouter, Together and Cohere. In practice that means a
-different SDK and a different key for every provider, hand-rolled failover when
-one of them returns a 429, and no shared view of what was used where.
+Mistral, DeepSeek, OpenRouter, Together, Cohere, NVIDIA NIM, SambaNova,
+Hugging Face and Cloudflare Workers AI. In practice that means a different SDK
+and a different key for every provider, hand-rolled failover when one of them
+returns a 429, and no shared view of what was used where.
 
-API Keychain collapses all of that into one OpenAI-compatible endpoint. You send
-a single keychain key and ask for an effort tier (`keychain-low`,
-`keychain-medium` or `keychain-high`). The gateway builds an ordered cascade of
-real models, tries them in priority order, skips anything that is throttled or
-cooling down, and returns a clean OpenAI response. Every call is logged so the
-dashboard can show request volume, token totals, success rate, latency and
-per-provider health.
+API Keychain collapses all of that into one gateway. You send a single keychain
+key and ask for an effort tier (`keychain-low`, `keychain-medium` or
+`keychain-high`) or a Claude pseudo-model (`claude-haiku-4-5`,
+`claude-sonnet-4-6`, `claude-opus-4-6`). The router builds an ordered cascade
+of real models, tries them in priority order, skips anything that is throttled or
+cooling down, and returns a clean response. OpenAI clients use
+`/v1/chat/completions`; Claude Code uses `/v1/messages` with the same routing
+under the hood.
 
-If your code already calls OpenAI, the only change is the base URL and the key.
+If your code already calls OpenAI or Claude, the only change is the base URL and
+the key.
 
 **Live:** [Dashboard](https://www.apikeychain.dev) · [Gateway health](https://api.apikeychain.dev/health)
 
@@ -68,7 +72,9 @@ See also [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 | Bring your own models | Pin any model id a connected provider supports into a tier, then reorder its priority. |
 | Usage analytics | Per-model and per-provider request counts, token totals, success rate, latency and daily volume. |
 | Unified keychain key | One revealable `ak-` key fronts everything and can be rotated without touching upstream credentials. |
-| OpenAI-compatible | Drop-in `/v1/chat/completions` and `/v1/models` for OpenAI SDKs and Chat Completions clients (Cursor, OpenCode, etc.). |
+| OpenAI-compatible | Drop-in `/v1/chat/completions` and `/v1/models` for OpenAI SDKs (Cursor, OpenCode, etc.). |
+| Anthropic Messages | Native `/v1/messages` and `/v1/messages/count_tokens` for Claude Code and Anthropic-format clients. |
+| Dual auth | Bearer token or `x-api-key` header with your `ak-` keychain key. |
 
 ## How routing works
 
@@ -145,7 +151,8 @@ The dashboard runs on `http://localhost:3000` and points at the gateway through
 ## Configuration
 
 The frontend reads the `NEXT_PUBLIC_` variables at build time. The backend reads
-its own variables from the process environment (it does not load `.env.local`).
+its own variables from the process environment. `env_loader.py` loads
+`.env.local` and `.env` from the project root on startup.
 
 | Variable | Scope | Description |
 | :-- | :-- | :-- |
@@ -167,17 +174,19 @@ Full tables and examples: [Configuration](docs/configuration.md) and [.env.examp
 ## Using the API
 
 Point any **OpenAI Chat Completions** client at the gateway and select an effort
-tier as the model (`keychain-low`, `keychain-medium`, or `keychain-high`).
+tier as the model (`keychain-low`, `keychain-medium`, or `keychain-high`). For
+**Claude Code**, set `ANTHROPIC_BASE_URL` to your gateway (without `/v1`) and
+`ANTHROPIC_API_KEY` to your `ak-` key.
 
-**Compatibility note:** The gateway implements `POST /v1/chat/completions` and
-`GET /v1/models` only. Tools that require other protocols need a different
-endpoint or a translating proxy:
+**Compatibility note:** The gateway implements OpenAI Chat Completions, OpenAI
+model listing, and Anthropic Messages. Tools that require other protocols need a
+different endpoint or bridge:
 
 | Client | Protocol | Works with Keychain? |
 | :-- | :-- | :-- |
 | OpenAI SDK, Cursor, OpenCode, curl | Chat Completions (`/v1/chat/completions`) | Yes |
+| Claude Code | Anthropic Messages (`/v1/messages`) | Yes |
 | OpenAI Codex CLI (2026+) | Responses API (`/v1/responses`) | No — use LiteLLM as a bridge, or Cursor/OpenCode |
-| Claude Code | Anthropic Messages (`/v1/messages`) | No — use OpenRouter or an Anthropic-compatible gateway |
 
 ### Python
 
@@ -212,6 +221,17 @@ const resp = await client.chat.completions.create({
 });
 ```
 
+### Claude Code
+
+```sh
+export ANTHROPIC_BASE_URL="http://localhost:8000"
+export ANTHROPIC_API_KEY="ak-your-keychain-key"
+```
+
+Claude Code calls `POST /v1/messages`. Model names like `claude-sonnet-4-6` map
+to effort tiers (`haiku` → low, `sonnet` → medium, `opus` → high) before
+routing through your provider cascade.
+
 ### curl
 
 ```sh
@@ -231,25 +251,29 @@ extend any of them from the dashboard.
 
 | Tier | Pseudo-model | Best for | Example models in the cascade |
 | :-- | :-- | :-- | :-- |
-| Low | `keychain-low` | Autocomplete, classification, high-volume calls | `gemini-2.0-flash`, `llama-3.1-8b-instant` |
+| Low | `keychain-low` | Autocomplete, classification, high-volume calls | `gemini-2.0-flash`, `nim/meta/llama-3.1-8b-instruct` |
 | Medium | `keychain-medium` | Everyday chat and agents | `groq/llama-3.3-70b-versatile`, `mistral-small-latest` |
 | High | `keychain-high` | Frontier reasoning on hard problems | `gemini-2.5-pro`, `deepseek/deepseek-r1` |
 
 ## Supported providers
 
-| Provider | Endpoint | Free models reachable |
+| Provider | Endpoint | Notes |
 | :-- | :-- | :-- |
-| Gemini | `generativelanguage.googleapis.com` | 10 |
-| Groq | `api.groq.com` | 10 |
-| Cerebras | `api.cerebras.ai` | 5 |
-| Mistral | `api.mistral.ai` | 10 |
-| DeepSeek | `api.deepseek.com` | 2 |
-| OpenRouter | `openrouter.ai` | 12 |
-| Together | `api.together.xyz` | 3 |
-| Cohere | `api.cohere.ai` | 7 |
+| Gemini | `generativelanguage.googleapis.com` | Google multimodal models |
+| Groq | `api.groq.com` | LPU inference |
+| Cerebras | `api.cerebras.ai` | Wafer-scale speed |
+| Mistral | `api.mistral.ai` | European frontier models |
+| DeepSeek | `api.deepseek.com` | Reasoning models |
+| OpenRouter | `openrouter.ai` | Meta-gateway to community free models |
+| Together | `api.together.xyz` | Open-source hosting |
+| Cohere | `api.cohere.ai` | Command models |
+| NVIDIA NIM | `integrate.api.nvidia.com` | NVIDIA-hosted open models |
+| SambaNova | `api.sambanova.ai` | Llama on SambaNova Cloud |
+| Hugging Face | `router.huggingface.co` | HF inference router |
+| Cloudflare | `api.cloudflare.com` | Workers AI (requires account ID) |
 
-Every provider is OpenAI-compatible, so the gateway forwards a normalized
-request and reads back a normalized response.
+Every provider is OpenAI-compatible upstream, so the gateway forwards a
+normalized request and reads back a normalized response.
 
 ## API reference
 
@@ -267,6 +291,8 @@ authorized with the keychain `ak-` key. Public endpoints need no auth.
 | `GET` | `/users/{id}/providers/health` | JWT | Per-provider status, cooldowns and counts. |
 | `GET` | `/users/{id}/usage` | JWT | Aggregate usage and breakdowns. |
 | `POST` | `/v1/chat/completions` | Keychain key | OpenAI-compatible chat completions. |
+| `POST` | `/v1/messages` | Keychain key | Anthropic Messages API (Claude Code). |
+| `POST` | `/v1/messages/count_tokens` | Keychain key | Token estimate for Anthropic clients. |
 | `GET` | `/v1/models` | Keychain key | OpenAI-compatible model list. |
 | `GET` | `/providers` `/models` `/health` | Public | Catalog and service health. |
 
@@ -319,6 +345,8 @@ api-keychain/
   docs/                 Installation, configuration, API reference, architecture
   examples/             Runnable curl, Python, TypeScript, Node, Next.js samples
   main.py               FastAPI application, gateway and management API
+  anthropic_adapter.py  Anthropic ↔ OpenAI translation for /v1/messages
+  env_loader.py         Loads .env.local / .env before other modules read env
   router.py             Request routing, cascade and failover
   registry.py           Provider catalog and model tiers
   crypto.py             AES-256-GCM provider-key encryption

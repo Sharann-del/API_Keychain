@@ -76,6 +76,10 @@ const PROVIDER_LABELS: Record<string, string> = {
   openrouter: "OpenRouter",
   together: "Together",
   cohere: "Cohere",
+  nim: "NVIDIA NIM",
+  sambanova: "SambaNova",
+  hf: "Hugging Face",
+  cf: "Cloudflare",
 };
 
 export function providerLabel(slug: string): string {

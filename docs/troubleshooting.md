@@ -48,10 +48,10 @@ public gateway URL such as `https://api.apikeychain.dev`, not
 
 ## Inference errors
 
-### `401 Unauthorized` on `/v1/chat/completions`
+### `401 Unauthorized` on `/v1/chat/completions` or `/v1/messages`
 
 - Use the **keychain** `ak-` key, not the Supabase JWT
-- Ensure the `Authorization: Bearer` header is present
+- Ensure the `Authorization: Bearer` header is present (or `x-api-key` for Anthropic clients)
 - Rotate the key if it was revoked
 
 ### `400 No provider keys configured`

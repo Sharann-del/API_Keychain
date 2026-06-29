@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   GitBranch,
   ArrowRight,
+  MessageSquare,
 } from "lucide-react";
 
 import { LandingNav } from "@/components/landing-nav";
@@ -20,7 +21,7 @@ import { CodeTabs } from "@/components/code-tabs";
 import { ProviderLogo } from "@/components/provider-logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PROXY_BASE_URL } from "@/lib/config";
+import { API_BASE_URL, PROXY_BASE_URL } from "@/lib/config";
 import { PROVIDERS, TIERS, TOTAL_MODELS, TOTAL_PROVIDERS } from "@/lib/catalog";
 import { cn, providerLabel } from "@/lib/utils";
 
@@ -32,10 +33,10 @@ const TIER_BADGE: Record<string, string> = {
 
 const PROMPT_CHIPS = [
   "Route a chat through keychain-high",
+  "Point Claude Code at your keychain URL",
   "Fail over when Groq rate-limits",
   "Swap OpenAI base URL in one line",
   "Track usage across every provider",
-  "Classify text with keychain-low",
   "Stream completions from any model",
 ];
 
@@ -81,9 +82,10 @@ function Hero() {
 
         <Reveal delay={120}>
           <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Unify Gemini, Groq, Cerebras, Mistral, DeepSeek and more behind a
-            single OpenAI-compatible endpoint. Effort-based routing, automatic
-            failover, and usage analytics — without juggling keys.
+            Unify {TOTAL_PROVIDERS} free-tier inference providers behind one
+            gateway. OpenAI Chat Completions for Cursor and SDKs, Anthropic
+            Messages for Claude Code — with effort-based routing, automatic
+            failover, and usage analytics.
           </p>
         </Reveal>
 
@@ -216,9 +218,9 @@ function LogoWall() {
 
 const STATS = [
   { value: `${TOTAL_PROVIDERS}`, label: "Inference providers" },
-  { value: `${TOTAL_MODELS}`, label: "Free-tier models" },
+  { value: `${TOTAL_MODELS}+`, label: "Free-tier models" },
   { value: "3", label: "Effort tiers" },
-  { value: "100%", label: "OpenAI-compatible" },
+  { value: "2", label: "Client protocols" },
 ];
 
 function StatsBand() {
@@ -252,6 +254,12 @@ const FEATURES = [
     span: "lg:col-span-2",
   },
   {
+    icon: MessageSquare,
+    title: "Claude Code ready",
+    body: "Native Anthropic Messages API with streaming, tools, and token counting — routed through your free-tier providers.",
+    span: "lg:col-span-2",
+  },
+  {
     icon: RefreshCw,
     title: "Automatic failover",
     body: "A 429 or outage on one provider transparently rolls to the next.",
@@ -269,13 +277,12 @@ const FEATURES = [
   {
     icon: KeyRound,
     title: "Unified keychain key",
-    body: "One revealable ak- key fronts everything. Rotate it instantly.",
+    body: "One revealable ak- key fronts everything. Bearer or x-api-key auth.",
   },
   {
     icon: Layers,
     title: "Bring your own models",
     body: "Pin any model id into a tier, then reorder priority to taste.",
-    span: "lg:col-span-2",
   },
   {
     icon: LineChart,
@@ -377,8 +384,8 @@ function HowItWorks() {
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="How it works"
-          title="From eight dashboards to one request"
-          subtitle="No SDK swaps, no per-provider glue. Point the OpenAI client at your keychain URL."
+          title="From twelve dashboards to one request"
+          subtitle="No SDK swaps, no per-provider glue. Point OpenAI or Anthropic clients at your keychain URL."
         />
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-stretch">
@@ -600,12 +607,12 @@ function Quickstart() {
           <SectionHeading
             align="left"
             eyebrow="Quickstart"
-            title="If you can call OpenAI, you're already done"
-            subtitle="Swap the base URL and key. Keep your prompts, your SDK, your streaming, your tools."
+            title="If you can call OpenAI or Claude, you're already done"
+            subtitle="Swap the base URL and key. OpenAI Chat Completions and Anthropic Messages both route through the same cascade."
           />
           <ul className="mt-6 space-y-3">
             {[
-              { Icon: Lock, label: "Drop-in base URL & bearer key" },
+              { Icon: Lock, label: "Drop-in base URL & ak- key (Bearer or x-api-key)" },
               { Icon: Network, label: "Server-side routing & failover" },
               { Icon: LineChart, label: "Every call logged for analytics" },
             ].map(({ Icon, label }) => (
@@ -635,8 +642,18 @@ m = Mistral(api_key=MISTRAL_KEY)
 # …and you hand-roll the failover.`,
               },
               {
+                id: "claude",
+                label: "Claude Code",
+                file: "claude.sh",
+                code: `export ANTHROPIC_BASE_URL="${API_BASE_URL}"
+export ANTHROPIC_API_KEY="ak-•••••••••••••••"
+
+# Claude Code uses /v1/messages — routed via your tier cascade
+claude`,
+              },
+              {
                 id: "after",
-                label: "After",
+                label: "OpenAI SDK",
                 file: "after.py",
                 code: `from openai import OpenAI
 

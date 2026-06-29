@@ -12,9 +12,11 @@ control the cascade and can customize tiers per user.
 
 ### How many providers and models are supported?
 
-Eight providers are integrated today (Gemini, Groq, Cerebras, Mistral, DeepSeek,
-OpenRouter, Together, Cohere). The dashboard catalog lists 59 free-tier models
-across those providers; the default tier cascades use a curated subset.
+Twelve providers are integrated: Gemini, Groq, Cerebras, Mistral, DeepSeek,
+OpenRouter, Together, Cohere, NVIDIA NIM, SambaNova, Hugging Face, and
+Cloudflare Workers AI. The dashboard catalog lists free-tier models per
+provider; the default tier cascades use a curated subset defined in
+`registry.py`.
 
 ### Does API Keychain store prompts?
 
@@ -29,6 +31,17 @@ compliance requirements before production use.
 The gateway builds a cascade starting with high-tier models, then falls through
 medium and low if needed. Within each tier, models are tried in priority order
 with user overrides applied.
+
+### How do Claude model names map to tiers?
+
+| Model | Effort |
+| --- | --- |
+| `claude-haiku-4-5` | low |
+| `claude-sonnet-4-6` | medium |
+| `claude-opus-4-6` | high |
+
+The same cascade runs whether you call `/v1/chat/completions` with
+`keychain-medium` or `/v1/messages` with `claude-sonnet-4-6`.
 
 ### Can I force a specific model?
 
@@ -64,16 +77,31 @@ platform.
 
 ## API compatibility
 
-### Which OpenAI endpoints are supported?
+### Which endpoints are supported?
+
+**OpenAI-compatible:**
 
 - `POST /v1/chat/completions` (including `stream: true`)
 - `GET /v1/models`
 
-Embeddings, audio, images, and assistants are not implemented.
+**Anthropic-compatible:**
+
+- `POST /v1/messages` (including streaming and tool use)
+- `POST /v1/messages/count_tokens`
+
+Embeddings, audio, images, assistants, and the OpenAI Responses API are not
+implemented.
+
+### Can I use Claude Code?
+
+Yes. Set `ANTHROPIC_BASE_URL` to your gateway host (e.g.
+`https://api.apikeychain.dev`) and `ANTHROPIC_API_KEY` to your `ak-` keychain
+key. Claude Code sends `x-api-key`, which the gateway accepts.
 
 ### Can I use the official OpenAI Python SDK?
 
-Yes. Set `base_url` to your gateway and `api_key` to your `ak-` key.
+Yes. Set `base_url` to your gateway `/v1` prefix and `api_key` to your `ak-`
+key.
 
 ## Deployment
 

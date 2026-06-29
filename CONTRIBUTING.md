@@ -1,8 +1,9 @@
 # Contributing to API Keychain
 
-Thank you for your interest in contributing. API Keychain is an OpenAI-compatible
-gateway that routes across eight free-tier LLM providers with effort-based
-cascades, automatic failover, and encrypted provider key storage.
+Thank you for your interest in contributing. API Keychain is a unified gateway
+that routes across twelve free-tier LLM providers with OpenAI and Anthropic
+client support, effort-based cascades, automatic failover, and encrypted
+provider key storage.
 
 ## Ways to contribute
 

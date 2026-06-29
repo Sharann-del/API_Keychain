@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "API Keychain",
     short_name: "API Keychain",
-    description: "One API Key. Multiple AI Providers.",
+    description: "One API key. Twelve providers. OpenAI and Claude.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

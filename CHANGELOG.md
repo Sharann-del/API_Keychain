@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Anthropic Messages API (`POST /v1/messages`, `POST /v1/messages/count_tokens`)
+  for Claude Code with streaming and tool-use translation.
+- Four new providers: NVIDIA NIM, SambaNova, Hugging Face, Cloudflare Workers AI.
+- `x-api-key` header auth for Anthropic clients.
+- `env_loader.py` — loads `.env.local` / `.env` for the FastAPI gateway.
+- Pytest suite (`tests/`) and CI test step.
+- Claude pseudo-models on `GET /v1/models`.
+
+### Changed
+
+- Expanded default tier cascades in `registry.py` (June 2026 catalog).
+- FastAPI lifespan context manager replaces deprecated startup event.
+- SQL-optimized rate-limit and provider count queries.
+
+### Fixed
+
+- Removed internal `_keychain` routing metadata from upstream API responses.
+
+### Added (earlier unreleased)
+
 - GitHub community health files, CI workflows, and expanded `docs/` and `examples/`.
 
 ## [1.0.0] - 2025-06-01

@@ -25,11 +25,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.apikeychain.dev"),
   title: "API Keychain",
   description:
-    "Unify Gemini, Groq, Cerebras, Mistral, DeepSeek and more behind a single OpenAI-compatible endpoint with effort-based routing, automatic failover and usage analytics.",
+    "One API key for every free AI model. Route across 12 providers with OpenAI Chat Completions and Anthropic Messages — effort tiers, failover, and analytics.",
   openGraph: {
     title: "API Keychain",
     description:
-      "One API key for every free AI model. OpenAI-compatible routing across Gemini, Groq, Cerebras, Mistral, DeepSeek and more.",
+      "One API key for every free AI model. OpenAI and Anthropic-compatible routing across Gemini, Groq, NVIDIA NIM, SambaNova, and more.",
     siteName: "API Keychain",
     type: "website",
     images: [
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "API Keychain",
     description:
-      "One API key for every free AI model. OpenAI-compatible routing with automatic failover.",
+      "One API key for every free AI model. OpenAI Chat Completions and Anthropic Messages with automatic failover.",
     images: ["/og.png"],
   },
   icons: {

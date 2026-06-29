@@ -37,8 +37,8 @@ const SELLING_POINTS = [
   },
   {
     icon: RefreshCw,
-    title: "Automatic failover",
-    body: "Rate limits and outages roll to the next model transparently.",
+    title: "OpenAI & Claude",
+    body: "Chat Completions for SDKs; Anthropic Messages for Claude Code.",
   },
   {
     icon: ShieldCheck,

@@ -29,8 +29,10 @@ NEXT_PUBLIC_API_BASE_URL=https://api.apikeychain.dev
 
 ## Backend (FastAPI)
 
-Read from the **process environment** at runtime. The gateway does not load
-`.env.local`.
+Read from the **process environment** at runtime. On startup, `env_loader.py`
+loads `.env.local` and `.env` from the project root (so one file can configure
+both Next.js and FastAPI locally). It also copies `NEXT_PUBLIC_SUPABASE_URL`
+into `SUPABASE_URL` when the latter is unset.
 
 | Variable | Required | Description |
 | --- | --- | --- |
@@ -102,13 +104,22 @@ Pseudo-models accepted by `/v1/chat/completions`:
 - `keychain-medium`
 - `keychain-high`
 
+Claude pseudo-models for `/v1/messages` (map to the same cascades):
+
+- `claude-haiku-4-5` → low
+- `claude-sonnet-4-6` → medium
+- `claude-opus-4-6` → high
+
 Tier cascades are defined in `registry.py` (`MODEL_TIERS`) and merged with
 per-user overrides at request time.
 
 ## Supported providers
 
 `gemini`, `groq`, `cerebras`, `mistral`, `deepseek`, `openrouter`, `together`,
-`cohere`
+`cohere`, `nim`, `sambanova`, `hf`, `cf`
+
+Cloudflare (`cf`) requires your Workers AI account ID when storing keys in the
+dashboard.
 
 Provider base URLs and OpenAI-compatible paths are in `registry.py` →
 `PROVIDERS`.

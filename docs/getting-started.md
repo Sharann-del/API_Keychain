@@ -55,6 +55,8 @@ Open `http://localhost:3000` and create an account.
 
 ## Step 5 — Send a request
 
+**OpenAI client:**
+
 ```sh
 curl http://localhost:8000/v1/chat/completions \
   -H "Authorization: Bearer ak-YOUR-KEY" \
@@ -65,9 +67,16 @@ curl http://localhost:8000/v1/chat/completions \
   }'
 ```
 
-You should receive an OpenAI-shaped JSON response. The gateway selected a model
-from the medium tier cascade and failed over automatically if an upstream was
-throttled.
+**Claude Code** (optional):
+
+```sh
+export ANTHROPIC_BASE_URL="http://localhost:8000"
+export ANTHROPIC_API_KEY="ak-YOUR-KEY"
+claude
+```
+
+You should receive a response. The gateway selected a model from the appropriate
+tier cascade and failed over automatically if an upstream was throttled.
 
 ## Next steps
 
