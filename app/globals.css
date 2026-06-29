@@ -242,3 +242,13 @@
 .recharts-surface:focus {
   outline: none;
 }
+
+/* Route crossfade via the View Transitions API (see TransitionLink). The
+   synced PixelSwarm lines up across pages, so only the foreground fades. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 360ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

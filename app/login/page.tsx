@@ -3,18 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  CheckCircle2,
-  Eye,
-  EyeOff,
-  Loader2,
-  Network,
-  RefreshCw,
-  ShieldCheck,
-} from "lucide-react";
+import { CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { FullscreenLoader } from "@/components/fullscreen-loader";
+import { PixelSwarm } from "@/components/pixel-swarm";
+import { TransitionLink } from "@/components/transition-link";
 import { useAuth } from "@/lib/auth";
 import { getSupabase, supabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -24,28 +18,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TOTAL_MODELS, TOTAL_PROVIDERS } from "@/lib/catalog";
 
 type Mode = "signin" | "signup";
 type NoticeKind = "info" | "warning";
-
-const SELLING_POINTS = [
-  {
-    icon: Network,
-    title: "Effort-based routing",
-    body: "One key cascades across every connected provider by tier.",
-  },
-  {
-    icon: RefreshCw,
-    title: "OpenAI & Claude",
-    body: "Chat Completions for SDKs; Anthropic Messages for Claude Code.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Encrypted at rest",
-    body: "Upstream provider keys are sealed before they hit the database.",
-  },
-];
 
 export default function AuthPage() {
   const router = useRouter();
@@ -131,78 +106,25 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="-mb-6 flex shrink-0 justify-center px-6 pt-20 pb-2 lg:-mb-8 lg:pt-24 lg:pb-4">
-        <Link
-          href="/"
-          className="mt-6 transition-opacity hover:opacity-80 lg:mt-8"
-        >
-          <h1 className="text-center font-heading text-5xl font-medium tracking-tight sm:text-6xl">
-            API Keychain
-          </h1>
-        </Link>
-      </header>
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-background">
+      {/* Drifting pixel field behind the card. */}
+      <PixelSwarm className="[mask-image:radial-gradient(ellipse_at_center,black_25%,transparent_75%)]" />
 
-      <div className="grid flex-1 lg:grid-cols-2">
-      {/* Brand panel */}
-      <aside className="hidden overflow-hidden lg:flex lg:flex-col lg:justify-center lg:p-12 lg:pt-0">
+      {/* Form */}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center p-4 sm:p-6">
         <div
-          className="relative ml-auto max-w-md animate-rise"
-          style={{ animationDelay: "120ms" }}
+          className="surface w-full max-w-3xl animate-rise p-12 sm:p-24"
+          style={{ animationDelay: "60ms" }}
         >
-          <h2 className="font-heading text-3xl font-medium leading-tight tracking-tight">
-            One key for {TOTAL_PROVIDERS} providers and {TOTAL_MODELS} models.
-          </h2>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Sign in to manage your providers, tune routing tiers and watch every
-            request flow through a single OpenAI-compatible endpoint.
-          </p>
-
-          <ul className="mt-10 space-y-5">
-            {SELLING_POINTS.map((p) => {
-              const Icon = p.icon;
-              return (
-                <li key={p.title} className="flex gap-3.5">
-                  <Icon className="mt-0.5 h-4 w-4 shrink-0 text-foreground" strokeWidth={1.6} />
-                  <div>
-                    <div className="font-heading text-sm font-normal">
-                      {p.title}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {p.body}
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </aside>
-
-      {/* Form panel */}
-      <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm">
-          <div
-            className="mb-7 animate-rise text-center"
-            style={{ animationDelay: "60ms" }}
+          <div className="mx-auto w-full max-w-sm">
+          <TransitionLink
+            href="/"
+            className="mb-8 block text-center font-heading text-4xl font-medium tracking-tight transition-opacity hover:opacity-80 sm:text-5xl"
           >
-            <div key={mode} className="animate-fade-in">
-              <h2 className="font-heading text-2xl font-medium tracking-tight">
-                {mode === "signin" ? "Welcome back" : "Create your keychain"}
-              </h2>
-              <p className="mt-1.5 text-sm text-muted-foreground">
-                {mode === "signin"
-                  ? "Sign in to your dashboard."
-                  : "Start routing across every free-tier model."}
-              </p>
-            </div>
-          </div>
+            API Keychain
+          </TransitionLink>
 
-          <div
-            className="surface animate-rise p-6"
-            style={{ animationDelay: "150ms" }}
-          >
-            <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -282,7 +204,6 @@ export default function AuthPage() {
                 {mode === "signin" ? "Sign in" : "Create account"}
               </Button>
             </form>
-          </div>
 
           {!supabaseConfigured && (
             <p className="mt-4 text-center text-xs text-muted-foreground">
@@ -295,7 +216,9 @@ export default function AuthPage() {
             className="mt-6 animate-rise text-center text-xs text-muted-foreground"
             style={{ animationDelay: "230ms" }}
           >
-            {mode === "signin" ? "New here? " : "Already have an account? "}
+            {mode === "signin"
+              ? "Don't have an account? "
+              : "Already have an account? "}
             <button
               type="button"
               onClick={() => {
@@ -304,12 +227,12 @@ export default function AuthPage() {
               }}
               className="font-medium text-foreground underline underline-offset-4"
             >
-              {mode === "signin" ? "Create an account" : "Sign in"}
+              {mode === "signin" ? "Create account" : "Sign in"}
             </button>
           </p>
+          </div>
         </div>
       </main>
-      </div>
     </div>
   );
 }

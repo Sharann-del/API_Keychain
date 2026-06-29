@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { TransitionLink } from "@/components/transition-link";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -52,12 +53,12 @@ export function LandingNav() {
                 size="sm"
                 className="hidden sm:inline-flex"
               >
-                <Link href="/login">Sign in</Link>
+                <TransitionLink href="/login">Sign in</TransitionLink>
               </Button>
               <Button asChild size="sm">
-                <Link href="/login">
+                <TransitionLink href="/login">
                   Get started <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                </TransitionLink>
               </Button>
             </>
           )}

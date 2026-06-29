@@ -13,7 +13,7 @@ interface PixelSwarmProps {
 }
 
 /**
- * A field of small white/grey squares arranged on a grid that drift, pulse,
+ * A field of small white/grey circles arranged on a grid that drift, pulse,
  * and swarm via layered flow noise — evoking a dithered/halftone surface in
  * slow motion. Pure canvas, one RAF loop, and it respects
  * prefers-reduced-motion (renders a still field).
@@ -67,10 +67,12 @@ export function PixelSwarm({ className, gap = 14, dot = 5 }: PixelSwarmProps) {
     }
 
     let raf = 0;
-    let start = performance.now();
 
-    function frame(now: number) {
-      const t = (now - start) / 1000;
+    function frame() {
+      // Drive the field from wall-clock time (not a per-mount start) so every
+      // PixelSwarm — landing, login, anywhere — shows the exact same drift at
+      // the same instant instead of each animating from its own phase.
+      const t = Date.now() / 1000;
       ctx.clearRect(0, 0, width, height);
 
       for (let gy = 0; gy < rows; gy++) {
@@ -94,14 +96,15 @@ export function PixelSwarm({ className, gap = 14, dot = 5 }: PixelSwarmProps) {
           const wave = (Math.sin(nx + ny + t * 0.9) + f1) * 0.5;
           const intensity = Math.max(0, Math.min(1, 0.42 + wave * 0.55));
 
-          // Shape: dim cells stay small, bright cells swell into bold squares.
-          const size = dot * (0.55 + intensity * 1.25);
-          const alpha = 0.16 + intensity * 0.72;
+          // Shape: dim cells stay small, bright cells swell into bold dots.
+          const size = dot * (0.5 + intensity * 1.0);
+          const alpha = 0.07 + intensity * 0.33;
 
-          const shade = 150 + Math.floor(intensity * 105); // grey -> white
+          const shade = 130 + Math.floor(intensity * 95); // grey -> soft white
           ctx.fillStyle = `rgba(${shade}, ${shade}, ${shade}, ${alpha})`;
-          const s = size;
-          ctx.fillRect(px - s / 2, py - s / 2, s, s);
+          ctx.beginPath();
+          ctx.arc(px, py, size / 2, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
@@ -110,7 +113,7 @@ export function PixelSwarm({ className, gap = 14, dot = 5 }: PixelSwarmProps) {
 
     if (reduced) {
       // One static frame.
-      frame(start);
+      frame();
     } else {
       raf = requestAnimationFrame(frame);
     }
