@@ -32,8 +32,6 @@
 
 </div>
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## Overview
 
 Modern apps want the generous free tiers from Gemini, Groq, Cerebras, Mistral,
@@ -52,8 +50,6 @@ Claude Code uses `/v1/messages` — same routing underneath.
 
 > If your code already calls OpenAI or Claude, the only change is the **base URL**
 > and the **key**.
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## How routing works
 
@@ -77,8 +73,6 @@ A single `keychain-high` request flows through the gateway like this:
 
 **One request in, automatic failover across providers, one clean response out.**
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## Highlights
 
 | Capability | What it does |
@@ -93,8 +87,6 @@ A single `keychain-high` request flows through the gateway like this:
 | **OpenAI-compatible** | Drop-in `/v1/chat/completions` and `/v1/models` for OpenAI SDKs (Cursor, OpenCode, etc.). |
 | **Anthropic Messages** | Native `/v1/messages` and `/v1/messages/count_tokens` for Claude Code and Anthropic-format clients. |
 | **Dual auth** | Bearer token or `x-api-key` header with your `ak-` keychain key. |
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Quickstart
 
@@ -130,8 +122,6 @@ npm run dev
 
 The dashboard runs on `http://localhost:3000` and points at the gateway through
 `NEXT_PUBLIC_API_BASE_URL`.
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Using the API
 
@@ -217,8 +207,6 @@ bridge:
 | Claude Code | Anthropic Messages (`/v1/messages`) | Yes |
 | OpenAI Codex CLI (2026+) | Responses API (`/v1/responses`) | No — use LiteLLM as a bridge, or Cursor/OpenCode |
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## Effort tiers
 
 Each tier is an ordered cascade of real models. Reorder, disable, or extend any
@@ -232,8 +220,6 @@ of them from the dashboard.
 
 > All tiers use **free-tier** upstream models only — tiers pick speed vs.
 > capability, not price.
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Supported providers
 
@@ -254,8 +240,6 @@ of them from the dashboard.
 
 Every provider is OpenAI-compatible upstream, so the gateway forwards a
 normalized request and reads back a normalized response.
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Architecture
 
@@ -297,8 +281,6 @@ Full tables and examples: [Configuration](docs/configuration.md) and [.env.examp
 
 </details>
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## API reference
 
 Management endpoints are authorized with the Supabase JWT. Gateway endpoints are
@@ -320,8 +302,6 @@ authorized with the keychain `ak-` key. Public endpoints need no auth.
 | `GET` | `/v1/models` | Keychain key | OpenAI-compatible model list. |
 | `GET` | `/providers` `/models` `/health` | Public | Catalog and service health. |
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## Security model
 
 Provider keys are encrypted with AES-256-GCM using `MASTER_SECRET` before they
@@ -331,8 +311,6 @@ shown once on creation and stored masked thereafter, and can be rotated at any
 time — which immediately invalidates the previous key. Management endpoints
 verify the Supabase JWT (both legacy HS256 and asymmetric signing keys via the
 project JWKS), and every gateway request is scoped to the owning user.
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Deployment
 
@@ -359,8 +337,6 @@ project JWKS), and every gateway request is scoped to the owning user.
   password reset). Add `https://apikeychain.dev/**` if the apex domain also
   serves the dashboard.
 
-<img src="./.github/divider.svg" alt="" width="100%" />
-
 ## Documentation
 
 | Guide | Description |
@@ -375,8 +351,6 @@ project JWKS), and every gateway request is scoped to the owning user.
 | [Examples](examples/) | curl, Python, TypeScript, Node, and Next.js samples |
 
 See also [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
-
-<img src="./.github/divider.svg" alt="" width="100%" />
 
 ## Project structure
 
