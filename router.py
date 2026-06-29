@@ -213,14 +213,6 @@ async def route_chat_completion(
                     continue
 
                 data = resp.json()
-                # Annotate which provider/model/key actually served the request.
-                data["_keychain"] = {
-                    "provider": provider,
-                    "model_entry": model_entry,
-                    "upstream_model": upstream_model,
-                    "key_label": key_label,
-                    "effort": effort,
-                }
                 attempts.append(
                     Attempt(model_entry, provider, resp.status_code, None, key_label)
                 )

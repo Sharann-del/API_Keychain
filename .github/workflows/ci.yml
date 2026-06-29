@@ -60,6 +60,12 @@ jobs:
         run: |
           python -c "import main, router, registry, crypto, models"
 
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: pytest tests/ -v
+
       - name: Health check
         run: |
           uvicorn main:app --host 127.0.0.1 --port 8000 &
