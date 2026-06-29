@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth";
 import { api, useApi, API_BASE_URL, ApiError } from "@/lib/api";
 import { loadPrimaryKey } from "@/lib/keystore";
 import { PROVIDER_SLUGS, TIER_LABELS } from "@/lib/catalog";
-import { providerLabel } from "@/lib/utils";
+import { providerLabel, cn } from "@/lib/utils";
 import type {
   Effort,
   ListKeychainKeysResponse,
