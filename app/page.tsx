@@ -20,6 +20,7 @@ import { PixelSwarm } from "@/components/pixel-swarm";
 import { Reveal } from "@/components/reveal";
 import { CodeTabs } from "@/components/code-tabs";
 import { ProviderLogo } from "@/components/provider-logo";
+import { Typewriter } from "@/components/typewriter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { API_BASE_URL, PROXY_BASE_URL } from "@/lib/config";
@@ -74,9 +75,21 @@ function Hero() {
       <div className="relative mx-auto max-w-4xl text-center">
         <Reveal delay={60}>
           <h1 className="display-hero font-heading">
-            One API key for
+            One API key for every
             <br />
-            every free AI model.
+            <span className="whitespace-nowrap">
+              free{" "}
+              <Typewriter
+                className="text-primary"
+                words={[
+                  "AI model.",
+                  "Gemini model.",
+                  "Llama model.",
+                  "Mistral model.",
+                  "DeepSeek model.",
+                ]}
+              />
+            </span>
           </h1>
         </Reveal>
 

@@ -119,6 +119,11 @@ const config: Config = {
           "0%, 100%": { transform: "scale(0.45)", opacity: "0.35" },
           "50%": { transform: "scale(1)", opacity: "1" },
         },
+        "caret-blink": {
+          "0%, 45%": { opacity: "1" },
+          "50%, 95%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
       animation: {
         rise: "rise 520ms cubic-bezier(0.16,1,0.3,1) both",
@@ -127,6 +132,7 @@ const config: Config = {
         "loading-bar": "loading-bar 1.1s ease-in-out infinite",
         marquee: "marquee 40s linear infinite",
         "streaming-pulse": "streaming-pulse 1s ease-in-out infinite",
+        "caret-blink": "caret-blink 1.1s steps(1) infinite",
         "accordion-down": "accordion-down 220ms cubic-bezier(0.4,0,0.2,1)",
         "accordion-up": "accordion-up 220ms cubic-bezier(0.4,0,0.2,1)",
       },
