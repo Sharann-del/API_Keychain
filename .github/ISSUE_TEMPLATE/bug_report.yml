@@ -1,0 +1,83 @@
+name: Bug report
+description: Something is broken in the gateway, dashboard, or documentation.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please search [existing issues](https://github.com/Sharann-del/API-Keychain/issues) first.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Where did the problem occur?
+      options:
+        - Gateway (FastAPI / routing / failover)
+        - Dashboard (Next.js UI)
+        - Authentication (Supabase)
+        - Provider integration (upstream API)
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Gateway version from `/health` or dashboard `package.json` version.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+      placeholder: Requesting `keychain-high` returned 502 after all providers failed, but Groq should have been available.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, curl command, or code snippet.
+      placeholder: |
+        1. Add a Groq provider key in the dashboard.
+        2. POST /v1/chat/completions with model keychain-medium.
+        3. Observe 502 with all_providers_failed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python/Node versions, deployment target, and relevant env (redact secrets).
+      placeholder: |
+        - macOS 15, Python 3.12, Node 20
+        - Local dev: uvicorn + next dev
+        - Providers configured: gemini, groq
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / response body
+      description: Gateway logs, browser console output, or the JSON error payload (redact keys).
+      render: shell
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have redacted API keys, JWTs, and `MASTER_SECRET` from this report.
+          required: true
+        - label: I searched existing issues and discussions for duplicates.
+          required: true

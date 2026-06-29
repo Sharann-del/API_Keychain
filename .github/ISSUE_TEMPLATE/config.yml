@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Sharann-del/API-Keychain/security/policy
+    about: Report sensitive security issues privately — do not open a public issue.
+  - name: Questions & discussion
+    url: https://github.com/Sharann-del/API-Keychain/discussions
+    about: Ask questions, share ideas, and show what you built.

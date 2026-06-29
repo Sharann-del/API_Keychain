@@ -1,0 +1,35 @@
+<svg width="760" height="200" viewBox="0 0 760 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="API Keychain">
+  <style>
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(data:font/woff2;base64,d09GMgABAAAAAAWcAAwAAAAACuAAAAVNAAQBBgAAAAAAAAAAAAAAAAAAAAAAAAAAGyAcMAZgAIEcCotwiR0BNgIkA2gLNgAEIAWDGgcgG4QIIJ6DTdkdFWeynCUWeSb5+iqCeKz7qpfuUTISF9RfEVeCR0nD69m/k1AzBVMhqZD2mPYTnqFVnowR6n+A8NpBa9Sa2gALFcnKkPFkzAaYe/miI3AEmozsVOVcAdDFyOpWdXyNrxCitg1pKnz0P58q7awWsBcjgCacVjKqVNNZQT42wH8BAFGmQyRraHXnyFQqaFVWYDY4m+Ntq7GsxwnUTNUCQG39jLSFKjUA4ESrhXKrmk0UBnCNaGbYjf9W0tkeVynYE1S8OghEkw0owAL8yUKEns10IJJysvDUlxORoEaLkQBRMMbBSTOVGf8F0RAgbINBiDjJ39Jddcphh+y33jprrbHKSissSyiSUG6XDyAKIFtAdQPgDLjzmP8SFNJRKxTCk9mMzuLuatnG27vI1c+7+d/TkO8bUOxK2/H+uavF/i6u9tWjMuGYmXWE8Yd1J3er9hmPtrdy+rILnTy6qkIno7qZcJdX167JhOvXzayrVxl/5Yq+XsBwh/VMEwxum89XtMYDQrhyXSbYMXM7YnCGGFvL5mw489o1eVyfdf26oLJN9cGRKOM/+ThzBe6YgWPpsD33OdjdCEaFOTfpu4alNPGI6UxtaTFjwwwzL4N5DfDg9k5QHw+4c9t1c/8UvE0fXdIMdnPrScz5HTYznk151tWcXZ0NXl8dXMrVY3Pfljx6ZkTboeYfMZ7YNdmzyHDuTo4iVHvNtOGFSNsilyMGiqW+Ey20sQ43dOXzdDWAjwuzi3a2/9vjT3vT2zHtvp3Asf0HHOfBuciywt9gBGqTpnhoHg76nJe1Qg9Gow3ucCBIUuRALAbaL6iC05B0jsUqnZ2CNBoCha0WF9zdVoPWOUPxmUu7HOdfDR056T48VykRLJg9lamkdoPmTpWrVZhgb2e0G42eSwiV6ilKaIHlbpkcxEqm0SwkJkIRBbWYELBPGHbv6XI4sjBQbQ/eb1DCh32JYMiXhPkG1puOAZZF4RAMKUDz7AtQNeJR7t3Y1m9bd9uPXXpM/SPF7sN77Qad3SoezPzfMQBeFAzCM+Xy+TYbNG+mzAhPg8RTtR4FQQP3kuV+R66+FRi6Meim42b12so+1GvFdPzSwqQU2JnRic7GdJCbaTbZlSqry05C3jo8T7Ql8EBg9NlThpzdSDeYd+3jJx6268GncVKufNX92B73hFyV2YnOmWhXo12utLjtxPuHkW7EcNJNYMkxwa4emEgCLmaMmo6vCtC54BMogQ2+u46uqphvs6rmz5HBcHNu1TybTTN/nhwmG2wEOiKV0hDLMIVqvmBKITJi+p/A1Z8t8sTe+h1rUx3diAtcvFE5uXwQ0pt1WrkRUmqVK5GV62qD+sYn7na4FtfzSVxH0B1XfSixbTLvaUSXUxc3HOLW7Lrr9AAoQt4RDYBSUkOuyxwEsMU5fefgR+28+F9dLesFwI3VG44C3A4svPX37d/T2sVOAeCCAkDgjRx2+wYQ/ew7+3vwI0LlC4gBlQSXB6SrlcTwg7rKgd6qZEhVFtlh0lQ7W5fVe4TUpE6Npy40V05ZlKlr55JvfgMIfQh6GaFR5VCs8ujrktCRAYSyBXeGkruVm1kowIVWZCG2G7ASTLXgyUq24m9XW5Thitomkj9qJ7QEP82ZSIkFYpwJZoCDESNOmnaokDnTjtXJjviMQCQGY4yUy4MLkyBCKCgjYUqXiTMODvH1T+ZJC0nBhVTlYmAgQEkQIqGUG4XkzkQZT3sbIwzODEjLzTfgImYixPS7RgiAo8aKAgO8bc4E20CEDhFyhe5mgrBDXPDZoJoIsSyKuf8rFwA=) format('woff2');
+    }
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url(data:font/woff2;base64,d09GMgABAAAAAAWwAAwAAAAACswAAAViAAQBBgAAAAAAAAAAAAAAAAAAAAAAAAAAGyAcMAZgAIEcCotkiQ0BNgIkA2gLNgAEIAWDEgcgG2wICJ6FsTMtjKuxCRtR21cvFYJ4rPuql+5R8ofuHXkB+yTwJHP4PP33YaaDUjEp6GBK4TH7UPfhM4iTcIZO8nn9DxCeNQnz+4e/X+p1gV2LlniJ/P+uOrfZo0WDjayKKrFwPMLCAdk01gZmjdph5M9nI4AmisUMK1fB4ABjsQH+/w8ATphBIyN6Z7ZLFmCwuMdEYTFYdrKtNqoRo0BN6QWAqn3SAliq9WwP1guT61WupzKDeziU7Yh/y2ln91R9YR+h0tQhwGEkoAALCGIEgi8/kklADFMZgQ8OjSBo0WMhCgYJRYYcBcr/BQ4NHNasEYeg7bd0V51w0AF7rbXGaqussNwySxImtAiunw9ALEDWgmoGwB1wAXxbQ1AIiBUKIQjMsr24PC3b+PlN8gz0WzBU544JCJ5oj9rxQeW7egd6eNpXz8no82bqIUYd1G1d9XRL01w3aOIJj9Ru3k2UdjOqqWnX/uO1azL6+nUz9epVRl25oq9PvDK6l9FTrlxhFNV89mklBYFzr1yW0VpjbnfdmWJsLRtrzSnXrsnj4tTr1yU0V18vPuf2MapINpxwRWLaRFVry+cw1zKp+aL+Bsv5mU7H8UpbWox/Rn3uHwTzOgj12Uf3dm7ZZMt1c/8jMGfjZ3T9+9MakG9oGjX+jPm/pfAtYlOv5oalXm++9NWPMz22cvu6QVRvqkatM3aHnPo4g6Ft0wnNdAszcND4pnBc46Y4mCjN3H3i4ycnJQ7BtkOJ/BaSuXbur/0rquq8uv/bxWfbgpf79k/bz/m/BQpWDccX/ltoXWxjKAxWu69oGj6AYz2Cs2PxA/7QAQwP2Y6VdId5bFKlYhNhrlQa4WpUfywywpMCZB2rdUroyk+ctl9q9+byopIH7fo1YxnqSU+WdkHpjFItCbRcrjlYO732kRAsUWXU6IDzYnOyRr4agpBVDA0MM3QolKO1T8OMvbOyv0tlwddjswP7Lk5KK6Z0WcxKl8g5T79vduMNJGahENLhOgKT3ZYTbbzvMePJjDr7gy1KjewnUKuC86tq5RzTUnTfnJobsLilV6WinS4l3aO0mbvlim7rdsitaikuSyUpAnR39OrWPSX7Shdi2XBu+AAn2zQnCm7mbs3htOqVVbgMouILUBUKV59M+79iDC7Aun5+IDERdiiH1FbTGDzw+g339FX7Xu3+HPw1kJePn0x7Qv7teYZ1p5RVuDSi4PNRBQKb8AIk/uyyBxwQE0lyLmzpwBeBV7kHi8w7A/K85S+6GCzw1XNkBQ3tdOpouoLFQqt0tv/VQA9UsK4qoyshLdtsc4hEFofZbHKIwLf/DXLzdiWWQcXGmdW0aQ3Ap92uqLVO6YLn/ClTpi+6aXDysCyoGzV17fwzqetPpy6gQeqsbPOegTPeRi6aMWbWGN4tGXCsAIAiHOAAoKKkyXtZigC2uKtPrZLCU4p99bSsFwA3Vq47BXA7pMCzvw/f4nXOLgvAAwWAwD/s9TpIUSq0KfLTUeXLzu9AVUQtNhnqjG/nEJRqIeUtf1aoVrbaanKpJnOAmM4zpDGz1HzK8wmOqqQ5SjsM+OTUCJbLvK81jnDVkPGqOaNUAdQMAyLYjot+jL7O9SwU4EETRiC2F7AcbGLB4YBY4cNxsUUJXs63WbEbWnwe544jYcihSFEmAwkOQY6lwDTPY0txeLBJh4UeTEHSSbazZZJGK0nikTGEPDYIKDKcg7FhLEfKGhPQNEvgkOTeeWI0EoeigyZfDIMqY50ktrCVE8iRi9dcIWYnucVfjASFop0ENpLg5GknSgYtDlSYEbK0AGyNRSPNswkWMXhYYVsobgiMYKLv/67yAA==) format('woff2');
+    }
+    .title { fill: #0a0a0a; }
+    .muted { fill: #6b7280; }
+    .title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+    .sub {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+    @media (prefers-color-scheme: dark) {
+      .title { fill: #fafafa; }
+      .muted { fill: #9aa0aa; }
+    }
+  </style>
+
+  <text x="380" y="88" text-anchor="middle" class="title" font-size="52" letter-spacing="-1.4">API Keychain</text>
+  <text x="380" y="126" text-anchor="middle" class="sub muted" font-size="18">One API key for every free-tier AI model.</text>
+</svg>

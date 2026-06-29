@@ -1,0 +1,65 @@
+name: Feature request
+description: Suggest an improvement to routing, the dashboard, or the API.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem you are trying to solve and how API Keychain could help.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Effort-based routing & failover
+        - Provider catalog & model tiers
+        - Dashboard & analytics
+        - Key management & encryption
+        - OpenAI-compatible API surface
+        - Deployment & operations
+        - Developer experience / SDK examples
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What pain point does this address?
+      placeholder: I need to pin a specific model for keychain-high without disabling the entire cascade.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How would you like this to work?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you evaluated.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority (your perspective)
+      options:
+        - Nice to have
+        - Would unblock my use case
+        - Critical for production
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this feature.
+        - label: I can help test an implementation.
