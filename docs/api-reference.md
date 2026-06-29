@@ -89,12 +89,12 @@ cascade, and returns an Anthropic-shaped response.
 
 **Model → effort mapping:**
 
-| Model | Effort tier |
-| --- | --- |
-| `claude-haiku-4-5` | low |
-| `claude-sonnet-4-6` | medium |
-| `claude-opus-4-6` | high |
-| `keychain-low` / `keychain-medium` / `keychain-high` | direct tier |
+| Model | Tier | Profile |
+| --- | --- | --- |
+| `claude-haiku-4-5` | low | Fast |
+| `claude-sonnet-4-6` | medium | Balanced |
+| `claude-opus-4-6` | high | Best |
+| `keychain-low` / `keychain-medium` / `keychain-high` | direct tier | Fast / balanced / best |
 
 Also honors `output_config.effort` when set to `low`, `medium`, or `high`.
 

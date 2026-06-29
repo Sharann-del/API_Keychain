@@ -65,7 +65,7 @@ See also [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 | Capability | What it does |
 | :-- | :-- |
-| Effort-based routing | Request `low`, `medium` or `high`. The router cascades down a ranked model list until one answers, trading speed for quality on demand. |
+| Effort-based routing | Request `low`, `medium` or `high` (fast, balanced, or best). The router cascades through free models until one answers. |
 | Automatic failover | A 429 or upstream outage transparently rolls to the next model, so the request still completes. |
 | Rate-limit cooldowns | A provider that was just throttled is parked in a cooldown window and skipped until it recovers. |
 | Encrypted at rest | Every upstream provider key is sealed with AES-256-GCM before it touches the database. |
@@ -249,11 +249,14 @@ curl http://localhost:8000/v1/chat/completions \
 Each tier is an ordered cascade of real models. You can reorder, disable or
 extend any of them from the dashboard.
 
-| Tier | Pseudo-model | Best for | Example models in the cascade |
+| Tier | Pseudo-model | Profile | Example models in the cascade |
 | :-- | :-- | :-- | :-- |
-| Low | `keychain-low` | Autocomplete, classification, high-volume calls | `gemini-2.0-flash`, `nim/meta/llama-3.1-8b-instruct` |
-| Medium | `keychain-medium` | Everyday chat and agents | `groq/llama-3.3-70b-versatile`, `mistral-small-latest` |
-| High | `keychain-high` | Frontier reasoning on hard problems | `gemini-2.5-pro`, `deepseek/deepseek-r1` |
+| Fast | `keychain-low` | Smallest, fastest free models | `gemini-2.0-flash`, `nim/meta/llama-3.1-8b-instruct` |
+| Balanced | `keychain-medium` | Everyday chat and agents | `groq/llama-3.3-70b-versatile`, `mistral-small-latest` |
+| Best | `keychain-high` | Strongest free models | `gemini-2.5-pro`, `deepseek/deepseek-r1` |
+
+All tiers use **free-tier** upstream models only — tiers pick speed vs capability,
+not price.
 
 ## Supported providers
 

@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 import { useAuth } from "@/lib/auth";
 import { api, useApi, ApiError } from "@/lib/api";
+import { TIER_LABELS } from "@/lib/catalog";
 import { providerLabel, cn } from "@/lib/utils";
 import type { ListModelsResponse, Tier, UserModel } from "@/lib/types";
 import { PageHeader } from "@/components/page-header";
@@ -146,7 +147,7 @@ export default function ModelsPage() {
     <div>
       <PageHeader
         title="Models"
-        description="Enable, prioritize and extend the models each effort tier cascades through."
+        description="Enable, prioritize and extend the free models each routing tier cascades through."
         actions={
           <Button onClick={() => setAddOpen(true)}>
             <Plus className="h-4 w-4" /> Add custom model
@@ -191,7 +192,7 @@ export default function ModelsPage() {
               <Card key={tier}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 capitalize">
-                    <Badge variant={TIER_VARIANT[tier]}>{tier}</Badge>
+                    <Badge variant={TIER_VARIANT[tier]}>{TIER_LABELS[tier]}</Badge>
                     <span className="text-muted-foreground">
                       {list.length} model{list.length > 1 ? "s" : ""}
                     </span>
@@ -421,9 +422,9 @@ function AddModelDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="high">{TIER_LABELS.high}</SelectItem>
+                <SelectItem value="medium">{TIER_LABELS.medium}</SelectItem>
+                <SelectItem value="low">{TIER_LABELS.low}</SelectItem>
               </SelectContent>
             </Select>
           </div>

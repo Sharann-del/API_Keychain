@@ -78,10 +78,10 @@ Every upstream candidate failed. Inspect `failed_attempts` in the response:
 | 5xx | Provider outage |
 | timeout | Model too slow or network issue |
 
-### Wrong model quality
+### Wrong model capability
 
-Effort tiers are pseudo-models. Use `keychain-high` for best quality,
-`keychain-low` for speed. Customize the cascade in **Models**.
+Effort tiers are pseudo-models. Use `keychain-high` for the **best** free
+models, `keychain-low` for the **fastest**. Customize the cascade in **Models**.
 
 ## Encryption & keys
 

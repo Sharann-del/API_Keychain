@@ -34,14 +34,15 @@ with user overrides applied.
 
 ### How do Claude model names map to tiers?
 
-| Model | Effort |
-| --- | --- |
-| `claude-haiku-4-5` | low |
-| `claude-sonnet-4-6` | medium |
-| `claude-opus-4-6` | high |
+| Model | Tier | Profile |
+| --- | --- | --- |
+| `claude-haiku-4-5` | low | **Fast** |
+| `claude-sonnet-4-6` | medium | **Balanced** |
+| `claude-opus-4-6` | high | **Best** |
 
 The same cascade runs whether you call `/v1/chat/completions` with
-`keychain-medium` or `/v1/messages` with `claude-sonnet-4-6`.
+`keychain-medium` or `/v1/messages` with `claude-sonnet-4-6`. All upstream
+models are free-tier.
 
 ### Can I force a specific model?
 

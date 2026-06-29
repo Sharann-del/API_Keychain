@@ -18,12 +18,12 @@ do not need all twelve. The cascade skips providers you have not configured.
 
 | Model | Tier | Use case |
 | --- | --- | --- |
-| `keychain-low` | Fast, economical | Classification, autocomplete |
-| `keychain-medium` | Balanced | Everyday chat and agents |
-| `keychain-high` | Highest quality | Hard reasoning tasks |
+| `keychain-low` | **Fast** | Classification, autocomplete |
+| `keychain-medium` | **Balanced** | Everyday chat and agents |
+| `keychain-high` | **Best** | Hard reasoning tasks |
 
-Each tier tries an ordered list of real models, cascading to lower tiers if
-needed. Claude pseudo-models (`claude-haiku-4-5`, `claude-sonnet-4-6`,
+Each tier tries an ordered list of **free** models, cascading to lower tiers if
+needed. Tiers reflect speed vs capability — not cost. Claude pseudo-models (`claude-haiku-4-5`, `claude-sonnet-4-6`,
 `claude-opus-4-6`) map to the same tiers for `/v1/messages`.
 
 ## Does Claude Code work?

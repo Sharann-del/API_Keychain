@@ -267,7 +267,7 @@ client = OpenAI(
 )
 
 resp = client.chat.completions.create(
-    model="keychain-medium",  # or keychain-low / keychain-high
+    model="keychain-medium",  # fast: keychain-low · balanced: keychain-medium · best: keychain-high
     messages=[{"role": "user", "content": "Hello!"}],
 )
 print(resp.choices[0].message.content)`}
@@ -288,11 +288,10 @@ claude`}
             <p className="text-xs text-muted-foreground">
               Same <code className="font-mono">ak-</code> key as above. Claude
               sends <code className="font-mono">x-api-key</code>, which the
-              gateway accepts. Use{" "}
-              <code className="font-mono">claude-haiku-4-5</code>,{" "}
-              <code className="font-mono">claude-sonnet-4-6</code>, or{" "}
-              <code className="font-mono">claude-opus-4-6</code> for low /
-              medium / high routing.
+              gateway accepts.               Use <code className="font-mono">claude-haiku-4-5</code> (fast),{" "}
+              <code className="font-mono">claude-sonnet-4-6</code> (balanced), or{" "}
+              <code className="font-mono">claude-opus-4-6</code> (best) — all route
+              through free-tier providers.
             </p>
           </div>
         </CardContent>

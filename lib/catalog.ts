@@ -241,12 +241,18 @@ export interface TierMeta {
   models: string[];
 }
 
+export const TIER_LABELS: Record<"low" | "medium" | "high", string> = {
+  low: "Fast",
+  medium: "Balanced",
+  high: "Best",
+};
+
 export const TIERS: TierMeta[] = [
   {
     tier: "low",
-    label: "Low",
+    label: "Fast",
     blurb:
-      "Latency-optimized small models for autocomplete, classification and high-volume calls.",
+      "Smallest, fastest free models — autocomplete, classification, and high-volume calls.",
     models: [
       "gemini-2.0-flash",
       "groq/llama-3.1-8b-instant",
@@ -260,9 +266,9 @@ export const TIERS: TierMeta[] = [
   },
   {
     tier: "medium",
-    label: "Medium",
+    label: "Balanced",
     blurb:
-      "The everyday workhorse tier — balanced quality and speed for chat and agents.",
+      "Everyday free models — solid quality and speed for chat and agents.",
     models: [
       "gemini-2.0-flash",
       "groq/llama-3.3-70b-versatile",
@@ -276,9 +282,9 @@ export const TIERS: TierMeta[] = [
   },
   {
     tier: "high",
-    label: "High",
+    label: "Best",
     blurb:
-      "Frontier reasoning for hard problems — R1, Gemini 2.5 Pro and Nemotron Ultra.",
+      "Strongest free models — R1, Gemini 2.5 Pro, and Nemotron Ultra for hard problems.",
     models: [
       "gemini-2.5-pro",
       "deepseek/deepseek-r1",

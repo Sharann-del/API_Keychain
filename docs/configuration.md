@@ -98,17 +98,20 @@ Configured via management API, not environment:
 
 ## Effort tiers
 
-Pseudo-models accepted by `/v1/chat/completions`:
+All tiers route **free-tier** models only. They trade speed for capability —
+not price.
 
-- `keychain-low`
-- `keychain-medium`
-- `keychain-high`
+Pseudo-models for `/v1/chat/completions`:
 
-Claude pseudo-models for `/v1/messages` (map to the same cascades):
+- `keychain-low` — **fast**
+- `keychain-medium` — **balanced**
+- `keychain-high` — **best**
 
-- `claude-haiku-4-5` → low
-- `claude-sonnet-4-6` → medium
-- `claude-opus-4-6` → high
+Claude pseudo-models for `/v1/messages` (same cascades):
+
+- `claude-haiku-4-5` → fast
+- `claude-sonnet-4-6` → balanced
+- `claude-opus-4-6` → best
 
 Tier cascades are defined in `registry.py` (`MODEL_TIERS`) and merged with
 per-user overrides at request time.

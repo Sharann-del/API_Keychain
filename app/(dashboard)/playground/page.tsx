@@ -7,8 +7,8 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { api, useApi, API_BASE_URL, ApiError } from "@/lib/api";
 import { loadPrimaryKey } from "@/lib/keystore";
-import { PROVIDER_SLUGS } from "@/lib/catalog";
-import { providerLabel, cn } from "@/lib/utils";
+import { PROVIDER_SLUGS, TIER_LABELS } from "@/lib/catalog";
+import { providerLabel } from "@/lib/utils";
 import type {
   Effort,
   ListKeychainKeysResponse,
@@ -535,7 +535,7 @@ export default function PlaygroundPage() {
           </Select>
         </div>
         <div className="w-full space-y-1.5 sm:w-40">
-          <label className="text-xs text-muted-foreground">Effort tier</label>
+          <label className="text-xs text-muted-foreground">Routing tier</label>
           <Select
             value={effort}
             onValueChange={(v) => setEffort(v as Effort)}
@@ -544,9 +544,9 @@ export default function PlaygroundPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="low">Low</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="high">High</SelectItem>
+              <SelectItem value="low">{TIER_LABELS.low} (keychain-low)</SelectItem>
+              <SelectItem value="medium">{TIER_LABELS.medium} (keychain-medium)</SelectItem>
+              <SelectItem value="high">{TIER_LABELS.high} (keychain-high)</SelectItem>
             </SelectContent>
           </Select>
         </div>

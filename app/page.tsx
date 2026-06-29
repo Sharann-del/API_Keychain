@@ -219,7 +219,7 @@ function LogoWall() {
 const STATS = [
   { value: `${TOTAL_PROVIDERS}`, label: "Inference providers" },
   { value: `${TOTAL_MODELS}+`, label: "Free-tier models" },
-  { value: "3", label: "Effort tiers" },
+  { value: "3", label: "Routing tiers" },
   { value: "2", label: "Client protocols" },
 ];
 
@@ -250,7 +250,7 @@ const FEATURES = [
   {
     icon: Network,
     title: "Effort-based routing",
-    body: "Ask for low, medium or high. The router cascades down a ranked list of models until one answers.",
+    body: "Pick fast, balanced, or best (`keychain-low` / `-medium` / `-high`). The router cascades through free models until one answers.",
     span: "lg:col-span-2",
   },
   {
@@ -369,7 +369,7 @@ const STEPS = [
   {
     icon: GitBranch,
     title: "Pick an effort tier",
-    body: "Send keychain-low, -medium or -high as the model. The router builds an ordered cascade.",
+    body: "Send `keychain-low`, `-medium`, or `-high` as the model — fast, balanced, or best free-tier cascades.",
   },
   {
     icon: Zap,
@@ -551,9 +551,9 @@ function Tiers() {
     <section id="tiers" className="px-5 py-16 sm:px-8 sm:py-20">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Effort tiers"
-          title="Three knobs, the whole model landscape"
-          subtitle="Each tier is an ordered cascade of real models. Reorder, disable or extend any of them from your dashboard."
+          eyebrow="Routing tiers"
+          title="Fast, balanced, or best — all free"
+          subtitle="Tiers trade speed for capability across free models, not price. Reorder, disable, or extend any cascade from your dashboard."
         />
         <div className="mt-10 grid gap-4 lg:grid-cols-3">
           {TIERS.map((t, i) => (
