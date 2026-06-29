@@ -5,6 +5,7 @@
 <br />
 
 <p align="center">
+  <a href="https://github.com/Sharann-del/API_Keychain/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/Release-v1.0.0-6E56CF?style=flat-square&logo=github&logoColor=white" alt="Release v1.0.0" /></a>
   <img src="https://img.shields.io/badge/Next.js_14-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js 14" />
   <img src="https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React 18" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
