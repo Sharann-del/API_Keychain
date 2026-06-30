@@ -1226,13 +1226,17 @@ async def _stream_anthropic_messages(
         return anthropic_error(502, "All candidate models were exhausted.", "api_error")
 
     _update_provider_health(db, user.id, handle.attempts)
-    _log_stream(db, user.id, effort, handle, started, key.id)
+    log_id = _log_stream(db, user.id, effort, handle, started, key.id)
 
     async def _bytes() -> AsyncIterator[bytes]:
-        async for chunk in convert_openai_stream_to_anthropic(
-            iter_stream(handle), request_model
-        ):
-            yield chunk
+        usage: Dict[str, Any] = {}
+        try:
+            async for chunk in convert_openai_stream_to_anthropic(
+                iter_stream(handle, usage_out=usage), request_model
+            ):
+                yield chunk
+        finally:
+            _update_stream_log(log_id, usage, started)
 
     return StreamingResponse(
         _bytes(),
@@ -1264,26 +1268,73 @@ def _log_stream(
     handle: StreamHandle,
     started: float,
     key_id: int,
-) -> None:
-    """Log a streamed request. Token usage is unknown for streams (-> null)."""
+) -> Optional[int]:
+    """Log a streamed request immediately (for rate limits); tokens filled later."""
     latency_ms = int((time.perf_counter() - started) * 1000)
     try:
-        db.add(
-            RequestLog(
-                user_id=user_id,
-                effort=effort,
-                models_attempted=[a.as_dict() for a in handle.attempts],
-                succeeded_model=handle.model_entry,
-                provider=handle.provider,
-                latency_ms=latency_ms,
-                status="success",
-                status_code=200,
-                keychain_key_id=key_id,
-            )
+        row = RequestLog(
+            user_id=user_id,
+            effort=effort,
+            models_attempted=[a.as_dict() for a in handle.attempts],
+            succeeded_model=handle.model_entry,
+            provider=handle.provider,
+            latency_ms=latency_ms,
+            status="success",
+            status_code=200,
+            keychain_key_id=key_id,
         )
+        db.add(row)
+        db.commit()
+        db.refresh(row)
+        return row.id
+    except Exception:
+        db.rollback()
+        return None
+
+
+def _update_stream_log(
+    log_id: Optional[int], usage: Dict[str, Any], started: float
+) -> None:
+    """Patch token usage and final latency after a stream finishes."""
+    if log_id is None or not usage:
+        return
+    prompt = usage.get("prompt_tokens")
+    completion = usage.get("completion_tokens")
+    total = usage.get("total_tokens")
+    if total is None and (prompt is not None or completion is not None):
+        total = int(prompt or 0) + int(completion or 0)
+    if prompt is None and completion is None and total is None:
+        return
+    latency_ms = int((time.perf_counter() - started) * 1000)
+    db = SessionLocal()
+    try:
+        row = db.get(RequestLog, log_id)
+        if row is None:
+            return
+        row.prompt_tokens = prompt
+        row.completion_tokens = completion
+        row.total_tokens = total
+        row.latency_ms = latency_ms
         db.commit()
     except Exception:
         db.rollback()
+    finally:
+        db.close()
+
+
+async def _stream_with_usage_log(
+    handle: StreamHandle,
+    *,
+    tier: str,
+    log_id: Optional[int],
+    started: float,
+) -> AsyncIterator[bytes]:
+    usage: Dict[str, Any] = {}
+    try:
+        async for chunk in iter_stream(handle, tier=tier, usage_out=usage):
+            yield chunk
+    finally:
+        _update_stream_log(log_id, usage, started)
 
 
 async def _stream_chat(
@@ -1321,10 +1372,10 @@ async def _stream_chat(
     # Stream started: record health + log now (before draining), so the request
     # counts toward rate limits and analytics even if the client disconnects.
     _update_provider_health(db, user.id, handle.attempts)
-    _log_stream(db, user.id, effort, handle, started, key.id)
+    log_id = _log_stream(db, user.id, effort, handle, started, key.id)
 
     return StreamingResponse(
-        iter_stream(handle, tier=effort),
+        _stream_with_usage_log(handle, tier=effort, log_id=log_id, started=started),
         media_type="text/event-stream",
         headers={
             "X-Keychain-Provider": handle.provider,

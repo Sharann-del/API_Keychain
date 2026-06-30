@@ -280,6 +280,7 @@ async def open_stream(
             base_url = PROVIDER_BASE_URLS[provider]
             payload = _build_payload(body, upstream_model)
             payload["stream"] = True
+            payload["stream_options"] = {"include_usage": True}
             keys = _rotate_keys(provider_keys[provider], f"{rotation_id}:{provider}")
 
             for key_label, encrypted_key in keys:
@@ -363,7 +364,29 @@ def _attempts_for_sse(
     return rows
 
 
-async def iter_stream(handle: StreamHandle, *, tier: str = "") -> AsyncIterator[bytes]:
+def _accumulate_usage_from_sse(text: str, usage: Dict[str, Any]) -> None:
+    """Merge ``usage`` from OpenAI-style ``data: {...}`` SSE lines (last wins)."""
+    for line in text.split("\n"):
+        if not line.startswith("data: "):
+            continue
+        payload = line[6:].strip()
+        if not payload or payload == "[DONE]":
+            continue
+        try:
+            data = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        chunk_usage = data.get("usage")
+        if isinstance(chunk_usage, dict) and chunk_usage:
+            usage.update(chunk_usage)
+
+
+async def iter_stream(
+    handle: StreamHandle,
+    *,
+    tier: str = "",
+    usage_out: Optional[Dict[str, Any]] = None,
+) -> AsyncIterator[bytes]:
     """Yield routing metadata, upstream SSE bytes, then a done event.
 
     NOTE: if the upstream drops mid-stream, the error surfaces here — there is no
@@ -381,6 +404,10 @@ async def iter_stream(handle: StreamHandle, *, tier: str = "") -> AsyncIterator[
     stream_started = time.perf_counter()
     try:
         async for chunk in handle.response.aiter_bytes():
+            if usage_out is not None:
+                _accumulate_usage_from_sse(
+                    chunk.decode("utf-8", errors="replace"), usage_out
+                )
             yield chunk
     finally:
         await handle.response.aclose()
